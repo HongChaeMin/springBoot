@@ -12,6 +12,7 @@ import org.zerock.ex2.memoRepository.MemoRepository;
 import javax.transaction.Transactional;
 import org.springframework.data.domain.Pageable;
 import java.beans.Transient;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.IntStream;
 
@@ -122,7 +123,7 @@ public class MemoRepositoryTests {
         }
     }
 
-    @Test
+    // paging 정렬
     public void testPageSort() {
         // mno기준으로 desc정렬
         Sort st1 = Sort.by("mno").descending();
@@ -140,6 +141,24 @@ public class MemoRepositoryTests {
         // Sort sort1 = Sort.by("mno").descending();
         // Sort sort2 = Sort.by("memoText").ascending();
         // Sort sortAll = sort1.add(sort2);
+    }
+
+    // 쿼리 메소드 예제
+    public void testQueryMethods() {
+        List<Memo> list = memoRepository.findByMnoBetweenOrderByMnoDesc(70L, 80L);
+
+        for (Memo memo : list) {
+            System.out.println(memo);
+        }
+    }
+
+    // 쿼리 메서드와 Pageable의 결합
+    public void testQueryMethodWithPageable() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("mno").descending());
+
+        Page<Memo> result = memoRepository.findByMnoBetween(10L, 50L, pageable);
+
+        result.get().forEach(memo -> System.out.println(memo));
     }
 
 }
