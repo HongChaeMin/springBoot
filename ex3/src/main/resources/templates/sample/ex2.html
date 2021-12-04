@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .target {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 반복문 -->
+    <!-- 주석 안에 관련태그를 못넣나봄 -->
+    <ul>
+        <li th:each="dto : ${list}"> <!-- 변수 : 목록 -->
+            [[${dto}]] <!-- 인라인 표현식 : 별도의 태그 속성으로 지정하지 않고 사용 -->
+        </li>
+    </ul>
+
+    <!-- 반목문의 상태(state) 객체 -->
+    <!-- JSTL 이랑 비슷하다고 생각하면 될듯 -->
+    <ul>
+        <li th:each="dto, state : ${list}">
+            [[${state.index}]] --- [[${dto}]]
+        </li>
+    </ul>
+
+    <!-- 제어문 처리 -->
+    <ul>
+        <li th:each="dto, state : ${list}" th:if="${dto.sno % 5 == 0}">
+            [[${dto}]]
+        </li>
+    </ul>
+
+    <ul>
+        <li th:each="dto, state : ${list}">
+            <span th:if="${dto.sno % 5 == 0}" th:text="${'----------------------' + dto.sno}" />
+            <span th:unless="${dto.sno % 5 == 0}" th:text="${dto.first}" />
+        </li>
+    </ul>
+
+    <!-- 삼항연산자 -->
+    <ul>
+        <li th:each="dto, state : ${list}" th:text="${dto.sno % 5 == 0} ? ${dto.sno} : ${dto.first}"/>
+    </ul>
+
+    <!-- class 추가 -->
+    <ul>
+        <li th:each="dto, state : ${list}" th:class="${dto.sno % 5 == 0} ? 'target'" th:text="${dto}"/>
+    </ul>
+
+</body>
+</html>
