@@ -51,5 +51,14 @@
         <li th:each="dto, state : ${list}" th:class="${dto.sno % 5 == 0} ? 'target'" th:text="${dto}"/>
     </ul>
 
+    <!-- block 속성 -->
+    <ul>
+        <!-- 별도의 html로 처리되지 않음 -->
+        <!-- 별도의 태그가 필요하지 않음 (제약이 없음) -->
+        <th:block th:each="dto : ${list}">
+            <li th:text="${dto.sno % 5 == 0} ? ${dto.sno} : ${dto.first}"></li>
+        </th:block>
+    </ul>
+
 </body>
 </html>

@@ -24,7 +24,7 @@ public class SampleController {
         log.info("ex1...................");
     }
 
-    @GetMapping({"/ex2"})
+    @GetMapping({"/ex2", "/exLink"})
     public void exModel(Model model) {
         List<SampleDTO> list = IntStream.rangeClosed(1, 20).asLongStream().mapToObj(i -> {
             SampleDTO dto = SampleDTO.builder()
@@ -41,23 +41,28 @@ public class SampleController {
 
     @GetMapping({"/exInline"})
     public String exInline(RedirectAttributes redirectAttributes) {
-        log.info("exLinline..................");
+        log.info("exInline..................");
 
         SampleDTO dto = SampleDTO.builder()
                 .sno(100L)
-                .first("Frist... 100")
+                .first("First... 100")
                 .last("Last... 100")
                 .regTime(LocalDateTime.now())
                 .build();
         redirectAttributes.addFlashAttribute("result", "success");
         redirectAttributes.addFlashAttribute("dto", dto);
 
-        return "redirect:/sample/ex03";
+        return "redirect:/sample/ex3";
     }
 
     @GetMapping("/ex3")
     public void ex3() {
         log.info("ex3.................");
+    }
+
+    @GetMapping({"/exLayout1", "/exLayout2", "/exTemplate", "exSidebar"})
+    public void exLayout1() {
+        log.info("exLayout............");
     }
 
 }

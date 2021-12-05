@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,6 +10,8 @@
     <h1 th:text="${result}"></h1>
     <h1 th:text="${dto}"></h1>
 
+    <!-- dto 가 JSON으로 포멧되어 옴 -->
+    <!-- js 객체로 사용하고 싶다면 JSON.parse("\" + dto + "\"); 로 사용 가능 -->
     <script th:inline="javascript">
         var msg = [[${result}]];
         var dto = [[${dto}]];
