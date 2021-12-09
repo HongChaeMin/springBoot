@@ -6,12 +6,11 @@ import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.zerock.guestbook.entity.BaseEntity;
 
 @Builder
 @AllArgsConstructor
 @Data
-public class PageRequestDTO<G, G1 extends BaseEntity> {
+public class PageRequestDTO {
 
     // PageRequestDTO의 목적은 JPA 쪽에서 사용하는 Pageable 타입의 객체를 생성하는 것
 
