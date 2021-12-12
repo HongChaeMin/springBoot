@@ -51,13 +51,15 @@ public class PageResultDTO<DTO, EN> { // dto와 entity를 의미
         this.size = pageable.getPageSize();
 
         // temp end page
-        int tempEnd = (int) (Math.ceil(this.page / 10.0)) + 10;
+        int tempEnd = (int) (Math.ceil(this.page / 10.0)) * 10;
 
         this.start = tempEnd - 9;
 
         this.prev = start > 1;
 
         this.end = totalPage > tempEnd ? tempEnd : totalPage;
+
+        this.next = totalPage > tempEnd;
 
         this.pageList = IntStream.rangeClosed(start, end).boxed().collect(Collectors.toList());
     }
