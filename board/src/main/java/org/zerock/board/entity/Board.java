@@ -10,6 +10,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = "writer") // @ToString 은 항상 exclude
+// 연관 관계에서는 @ToString()을 주의
+// 연관 관계가 있는 엔티티 클래스의 경우 @ToString()을 할 때는 습관적으로 exclude 속성을 사용하는 것이 좋음
 public class Board extends BaseEntity{
 
     @Id
@@ -21,7 +23,7 @@ public class Board extends BaseEntity{
     private String content;
 
     // 연관관계 지정
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY) // 명시적으로 Lazy 로딩 지정
     private Member writer;
 
 }
