@@ -1,6 +1,5 @@
 package org.zerock.board.repository;
 
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -65,7 +64,6 @@ public class BoardRepositoryTests {
         }
     }
 
-    @Test
     public void testWithReplyCount() {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
