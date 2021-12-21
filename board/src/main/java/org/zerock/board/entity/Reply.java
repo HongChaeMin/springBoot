@@ -20,7 +20,7 @@ public class Reply extends BaseEntity{
 
     private String replyer;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Board board;
 
 }

@@ -11,6 +11,7 @@ import org.zerock.board.dto.PageResultDTO;
 import org.zerock.board.entity.Board;
 import org.zerock.board.entity.Member;
 import org.zerock.board.repository.BoardRepository;
+import org.zerock.board.repository.MemberRepository;
 import org.zerock.board.repository.ReplyRepository;
 
 import javax.transaction.Transactional;
@@ -22,6 +23,7 @@ import java.util.function.Function;
 @Log4j2
 public class BoardServiceImpl implements BoardService {
 
+    private final MemberRepository memberRepository;
     private final BoardRepository boardRepository; // 자동 주입 final
     private final ReplyRepository replyRepository;
 
@@ -29,9 +31,17 @@ public class BoardServiceImpl implements BoardService {
     public Long insertBoard(BoardDTO boardDTO){
         log.info(boardDTO);
 
+        // 난관 봉착,,,
+        Member member = memberRepository.getById(boardDTO.getWriterEmail());
+
+        System.out.println("member :::::::::::: " + member);
+
         Board board = dtoToEntity(boardDTO);
+        board.builder().writer(member);
 
         boardRepository.save(board);
+
+        System.out.println("result ::::::::::::::: " + board.getBno());
 
         return board.getBno();
     }

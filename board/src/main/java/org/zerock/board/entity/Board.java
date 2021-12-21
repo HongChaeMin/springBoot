@@ -23,7 +23,7 @@ public class Board extends BaseEntity{
     private String content;
 
     // 연관관계 지정
-    @ManyToOne (fetch = FetchType.LAZY) // 명시적으로 Lazy 로딩 지정
+    @ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL) // 명시적으로 Lazy 로딩 지정
     private Member writer;
 
     public void setTitle(String title) {

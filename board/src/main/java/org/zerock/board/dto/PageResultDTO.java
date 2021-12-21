@@ -33,7 +33,6 @@ public class PageResultDTO<DTO, EN> {
         totalPage = result.getTotalPages();
 
         makePageList(result.getPageable());
-
     }
 
     private void makePageList(Pageable pageable) {
