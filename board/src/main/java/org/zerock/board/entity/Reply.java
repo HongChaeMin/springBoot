@@ -20,7 +20,8 @@ public class Reply extends BaseEntity{
 
     private String replyer;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    // https://jamong-icetea.tistory.com/236
+    @ManyToOne
     private Board board;
 
 }

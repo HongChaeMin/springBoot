@@ -1,5 +1,6 @@
 package org.zerock.board.repository;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
@@ -21,11 +22,15 @@ public class BoardRepositoryTests {
     @Autowired
     private BoardRepository boardRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Test
     public void insertBoard() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
-            Member member = Member.builder().email("user" + i + "@minhong.com").build();
-
+            Member member = Member.builder().email("user" + i + "@minHong.com").build();
             Board board = Board.builder()
+                    .bno((long) i)
                     .title("Title... " + i)
                     .content("Content... " + i)
                     .writer(member)

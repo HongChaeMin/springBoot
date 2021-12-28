@@ -31,13 +31,15 @@ public class BoardServiceImpl implements BoardService {
     public Long insertBoard(BoardDTO boardDTO){
         log.info(boardDTO);
 
-        // 난관 봉착,,,
         Member member = memberRepository.getById(boardDTO.getWriterEmail());
 
         System.out.println("member :::::::::::: " + member);
 
-        Board board = dtoToEntity(boardDTO);
-        board.builder().writer(member);
+        Board board = Board.builder()
+                .title(boardDTO.getTitle())
+                .content(boardDTO.getContent())
+                .writer(member)
+                .build();
 
         boardRepository.save(board);
 
@@ -69,6 +71,7 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public void deleteWithReplies(Long bno) {
+        // 분명 테스트 코드에서 잘 됐었자나...!!!! 왜 그래
         replyRepository.deleteByBno(bno);
         boardRepository.deleteById(bno);
     }

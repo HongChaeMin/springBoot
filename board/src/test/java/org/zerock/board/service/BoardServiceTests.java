@@ -22,6 +22,7 @@ public class BoardServiceTests {
         Long bno = boardService.insertBoard(dto);
     }
 
+    @Test
     public void testSelectBoardList() {
         PageRequestDTO pageRequestDTO = new PageRequestDTO();
 
@@ -41,11 +42,10 @@ public class BoardServiceTests {
     }
 
     public void testDelete() {
-        Long bno = 1L;
+        Long bno = 107L;
         boardService.deleteWithReplies(bno);
     }
 
-    @Test
     public void testUpdate() {
         BoardDTO boardDTO = BoardDTO.builder()
                 .bno(99L)

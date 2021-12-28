@@ -15,8 +15,9 @@ public class ReplyRepositoryTests {
     @Autowired
     private ReplyRepository replyRepository;
 
+    @Test
     public void insertReply() {
-        IntStream.rangeClosed(1, 100).forEach(i -> {
+        IntStream.rangeClosed(1, 300).forEach(i -> {
             // 게시판 번호 랜덤
             long bno = (long) (Math.random() * 100) + 1;
 
@@ -31,7 +32,6 @@ public class ReplyRepositoryTests {
         });
     }
 
-    @Test
     public void testRead1() {
 
         // Eager loading
