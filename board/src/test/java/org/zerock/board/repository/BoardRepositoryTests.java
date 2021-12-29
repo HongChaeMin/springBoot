@@ -25,7 +25,6 @@ public class BoardRepositoryTests {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Test
     public void insertBoard() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
             Member member = Member.builder().email("user" + i + "@minHong.com").build();
@@ -79,6 +78,18 @@ public class BoardRepositoryTests {
 
             System.out.println(Arrays.toString(obj));
         });
+    }
+
+    public void testSearchBoardRepository() {
+        boardRepository.search1();
+    }
+
+    @Test
+    public void testSearchPage() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending().and(Sort.by("title").ascending()));
+
+        Page<Object[]> result = boardRepository.searchPage("t", "1", pageable);
+
     }
 
 }
