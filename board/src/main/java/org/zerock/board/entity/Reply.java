@@ -21,7 +21,7 @@ public class Reply extends BaseEntity{
     private String replyer;
 
     // https://jamong-icetea.tistory.com/236
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
 }
