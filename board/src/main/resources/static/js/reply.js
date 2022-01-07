@@ -122,6 +122,7 @@ $(document).ready(function() {
 
         let reply = {
             rno : rno,
+            bno : bno,
             text : $('input[name="replyText"]').val(),
             replyer : $('input[name="replyer"]').val()
         }
