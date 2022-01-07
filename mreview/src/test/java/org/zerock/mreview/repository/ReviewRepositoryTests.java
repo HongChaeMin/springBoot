@@ -16,6 +16,9 @@ public class ReviewRepositoryTests {
     @Autowired
     private ReviewRepository reviewRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
     public void insertMovieReviews() {
         // 200개 리뷰 등록
         IntStream.rangeClosed(1, 200).forEach(i -> {
@@ -48,6 +51,15 @@ public class ReviewRepositoryTests {
                     movieReview.getText() + "\t" + movieReview.getMember().getEmail());
             System.out.println("-------------------------------------");
         });
+
+    }
+
+    @Test
+    public void testDeleteByMember() {
+        Member member = Member.builder().id(97L).build();
+
+        reviewRepository.deleteByMember(member);
+        memberRepository.deleteById(97L);
 
     }
 
