@@ -1,6 +1,7 @@
 package org.zerock.mreview.controller;
 
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -10,10 +11,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.zerock.mreview.dto.UploadResultDTO;
+import org.zerock.mreview.dto.MovieImageDTO;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +44,7 @@ public class UploadController {
 
             File file = new File(uploadPath + File.separator + srcFileName);
 
-            log.info("file :::::::::::::::: " + file);
+            log.info("file ::::::::::::::::: " + file);
 
             HttpHeaders headers = new HttpHeaders();
 
@@ -60,8 +62,8 @@ public class UploadController {
     }
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles) {
-        List<UploadResultDTO> uploadResultDTOList = new ArrayList<>();
+    public ResponseEntity<List<MovieImageDTO>> uploadFile(MultipartFile[] uploadFiles) {
+        List<MovieImageDTO> movieImageDTOList = new ArrayList<>();
 
         for (MultipartFile uploadFile : uploadFiles) {
 
@@ -76,7 +78,7 @@ public class UploadController {
             // 엣지는 전체 경로로 들어와서 해줘야됨
             // String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
-            log.info("fileName ::::::::: " + originalName);
+            log.info("fileName ::::::::::::: " + originalName);
 
             // 날짜 폴더 생성
             String folderPath = makeFolder();
@@ -86,18 +88,47 @@ public class UploadController {
 
             // 저장할 파일 이름 중간에 _를 사용해서 구분
             String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + originalName;
+            // 썸네일 파일 이름
+            String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + originalName;
 
             Path savePath = Paths.get(saveName);
 
             try {
+                // 기본 이미지
                 uploadFile.transferTo(savePath);
-                uploadResultDTOList.add(new UploadResultDTO(originalName, uuid, folderPath));
+
+                // 썸네일 이미지
+                File thumbnailFile = new File(thumbnailSaveName);
+                // 썸네일 생성
+                Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+
+                movieImageDTOList.add(new MovieImageDTO(originalName, uuid, folderPath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-        return new ResponseEntity<>(uploadResultDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(movieImageDTOList, HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteFile")
+    public ResponseEntity<Boolean> deleteFile(String fileName) {
+
+        String srcFileName = null;
+        try {
+            srcFileName = URLDecoder.decode(fileName, "UTF-8");
+
+            File dImgFile = new File(uploadPath + File.separator, srcFileName);
+            boolean dImgResult = dImgFile.delete();
+
+            File tImgFile = new File(dImgFile.getParent(), "s_" + dImgFile.getName());
+            boolean tImgResult = tImgFile.delete();
+
+            return new ResponseEntity<>(dImgResult && tImgResult ? true : false, HttpStatus.OK);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String makeFolder() {
