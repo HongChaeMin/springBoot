@@ -29,6 +29,7 @@ dependencies {
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.7.0'
+	implementation group: 'net.coobird', name: 'thumbnailator', version: '0.4.1'
 }
 
 test {

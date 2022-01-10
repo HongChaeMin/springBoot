@@ -1,6 +1,7 @@
 package org.zerock.mreview.controller;
 
 import lombok.extern.log4j.Log4j2;
+import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,7 @@ import org.zerock.mreview.dto.UploadResultDTO;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +44,7 @@ public class UploadController {
 
             File file = new File(uploadPath + File.separator + srcFileName);
 
-            log.info("file :::::::::::::::: " + file);
+            log.info("file ::::::::::::::::: " + file);
 
             HttpHeaders headers = new HttpHeaders();
 
@@ -76,7 +78,7 @@ public class UploadController {
             // 엣지는 전체 경로로 들어와서 해줘야됨
             // String fileName = originalName.substring(originalName.lastIndexOf("\\") + 1);
 
-            log.info("fileName ::::::::: " + originalName);
+            log.info("fileName ::::::::::::: " + originalName);
 
             // 날짜 폴더 생성
             String folderPath = makeFolder();
@@ -86,11 +88,20 @@ public class UploadController {
 
             // 저장할 파일 이름 중간에 _를 사용해서 구분
             String saveName = uploadPath + File.separator + folderPath + File.separator + uuid + "_" + originalName;
+            // 썸네일 파일 이름
+            String thumbnailSaveName = uploadPath + File.separator + folderPath + File.separator + "s_" + uuid + "_" + originalName;
 
             Path savePath = Paths.get(saveName);
 
             try {
+                // 기본 이미지
                 uploadFile.transferTo(savePath);
+
+                // 썸네일 이미지
+                File thumbnailFile = new File(thumbnailSaveName);
+                // 썸네일 생성
+                Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
+
                 uploadResultDTOList.add(new UploadResultDTO(originalName, uuid, folderPath));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -98,6 +109,31 @@ public class UploadController {
 
         }
         return new ResponseEntity<>(uploadResultDTOList, HttpStatus.OK);
+    }
+
+    @PostMapping("/deleteFile")
+    public ResponseEntity<Boolean> deleteFile(String fileName) {
+
+        log.info("postMapping /deleteFile !!");
+        log.info("postMapping /deleteFile !!");
+        log.info("postMapping /deleteFile !!");
+        log.info("postMapping /deleteFile !!");
+
+        String srcFileName = null;
+        try {
+            srcFileName = URLDecoder.decode(fileName, "UTF-8");
+
+            File dImgFile = new File(uploadPath + File.separator, srcFileName);
+            boolean dImgResult = dImgFile.delete();
+
+            File tImgFile = new File(dImgFile.getParent(), "s_" + dImgFile.getName());
+            boolean tImgResult = tImgFile.delete();
+
+            return new ResponseEntity<>(dImgResult && tImgResult ? true : false, HttpStatus.OK);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(false, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String makeFolder() {
