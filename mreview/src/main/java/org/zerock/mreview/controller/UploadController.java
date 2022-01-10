@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.zerock.mreview.dto.UploadResultDTO;
+import org.zerock.mreview.dto.MovieImageDTO;
 
 import java.io.File;
 import java.io.IOException;
@@ -62,8 +62,8 @@ public class UploadController {
     }
 
     @PostMapping("/uploadFile")
-    public ResponseEntity<List<UploadResultDTO>> uploadFile(MultipartFile[] uploadFiles) {
-        List<UploadResultDTO> uploadResultDTOList = new ArrayList<>();
+    public ResponseEntity<List<MovieImageDTO>> uploadFile(MultipartFile[] uploadFiles) {
+        List<MovieImageDTO> movieImageDTOList = new ArrayList<>();
 
         for (MultipartFile uploadFile : uploadFiles) {
 
@@ -102,22 +102,17 @@ public class UploadController {
                 // 썸네일 생성
                 Thumbnailator.createThumbnail(savePath.toFile(), thumbnailFile, 100, 100);
 
-                uploadResultDTOList.add(new UploadResultDTO(originalName, uuid, folderPath));
+                movieImageDTOList.add(new MovieImageDTO(originalName, uuid, folderPath));
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-        return new ResponseEntity<>(uploadResultDTOList, HttpStatus.OK);
+        return new ResponseEntity<>(movieImageDTOList, HttpStatus.OK);
     }
 
     @PostMapping("/deleteFile")
     public ResponseEntity<Boolean> deleteFile(String fileName) {
-
-        log.info("postMapping /deleteFile !!");
-        log.info("postMapping /deleteFile !!");
-        log.info("postMapping /deleteFile !!");
-        log.info("postMapping /deleteFile !!");
 
         String srcFileName = null;
         try {

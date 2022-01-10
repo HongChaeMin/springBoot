@@ -9,7 +9,7 @@ import java.net.URLEncoder;
 
 @Data
 @AllArgsConstructor
-public class UploadResultDTO implements Serializable {
+public class MovieImageDTO implements Serializable {
 
     private String fileName;
 
@@ -34,4 +34,7 @@ public class UploadResultDTO implements Serializable {
         }
         return "";
     }
+
+    //public void setImgDTO(JSON)
+
 }

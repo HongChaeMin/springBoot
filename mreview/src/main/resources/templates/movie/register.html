@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<th:block th:replace="~{/layout/basic :: setContent(~{this::content})}">
+
+    <th:block th:fragment="content">
+        <h1 class="mt-4">Movie Register Page</h1>
+
+        <form th:action="@{/movie/register}" th:method="post">
+            <div calss="form-group">
+                <label>Title</label>
+                <input type="text" class="form-control" name="title" placeholder="Enter Title">
+            </div>
+
+            <div class="form-group fileForm">
+                <label>Image Files</label>
+                <div class="custom-file">
+                    <input class="custom-file-input files" id="fileInput" type="file" multiple>
+                    <label class="custom-file-label" data-browse="Browse"></label>
+                </div>
+            </div>
+
+            <div class="box"></div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="uploadResult">
+            <ul>
+
+            </ul>
+        </div>
+
+        <script th:src="@{/js/register.js}"></script>
+        <link rel="stylesheet" th:href="@{/css/register-style.css}">
+
+    </th:block>
+
+</th:block>

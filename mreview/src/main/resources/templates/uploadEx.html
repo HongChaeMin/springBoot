@@ -54,12 +54,6 @@
                 let fileName = target.data("name");
                 let targetDiv = $(this).closest("div");
 
-                console.log("removeBtn click !");
-                console.log("removeBtn click !");
-                console.log("removeBtn click !");
-                console.log("removeBtn click !");
-
-
                 $.post("/deleteFile", {fileName: fileName}, function (result) {
                     if (result === true) {
                         targetDiv.remove();
