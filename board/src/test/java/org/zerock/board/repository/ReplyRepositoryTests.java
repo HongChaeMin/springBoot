@@ -53,7 +53,6 @@ public class ReplyRepositoryTests {
         System.out.println(reply.getBoard());
     }
 
-    @Test
     public void testListByBoard() {
         List<Reply> replyList = replyRepository.getRepliesByBoardOrderByBno(Board.builder().bno(3L).build());
 
