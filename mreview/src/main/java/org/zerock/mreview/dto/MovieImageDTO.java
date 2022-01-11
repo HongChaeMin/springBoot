@@ -9,7 +9,7 @@ import java.net.URLEncoder;
 
 @Data
 @AllArgsConstructor
-public class UploadResultDTO implements Serializable {
+public class MovieImageDTO implements Serializable {
 
     private String fileName;
 
@@ -25,4 +25,16 @@ public class UploadResultDTO implements Serializable {
         }
         return "";
     }
+
+    public String getThumbnailURL() {
+        try {
+            return URLEncoder.encode(folderPath + "/s_" + uuid + "_" + fileName, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    //public void setImgDTO(JSON)
+
 }
