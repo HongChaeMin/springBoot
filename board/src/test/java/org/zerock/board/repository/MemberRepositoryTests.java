@@ -15,7 +15,6 @@ public class MemberRepositoryTests {
     private MemberRepository memberRepository;
 
     // 데이터 생성
-    @Test
     public void insertMember() {
        IntStream.rangeClosed(1, 100).forEach(i -> {
             Member member = Member.builder()
