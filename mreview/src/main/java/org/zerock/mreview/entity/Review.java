@@ -10,7 +10,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Getter
 @ToString(exclude = {"movie_id", "user_id"})
-public class Review {
+public class Review extends BaseEntity{
 
     @Id @GeneratedValue (strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
@@ -27,5 +27,13 @@ public class Review {
     private int grade;
 
     private String text;
+
+    public void changeGrade(int grade) {
+        this.grade = grade;
+    }
+
+    public void changeText(String text) {
+        this.text = text;
+    }
 
 }

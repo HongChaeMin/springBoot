@@ -1,6 +1,7 @@
 package org.zerock.mreview.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -9,6 +10,7 @@ import java.net.URLEncoder;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class MovieImageDTO implements Serializable {
 
     private String fileName;

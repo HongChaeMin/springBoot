@@ -51,6 +51,7 @@ public class MovieRepositoryTests {
         });
     }
 
+    @Test
     public void testListPage() {
         PageRequest pageRequest = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
 
@@ -62,7 +63,6 @@ public class MovieRepositoryTests {
 
     }
 
-    @Test
     public void testMovieWithAll() {
         List<Object[]> result = movieRepository.getMovieWithAll(100L);
 
