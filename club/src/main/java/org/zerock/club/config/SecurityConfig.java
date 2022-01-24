@@ -1,15 +1,20 @@
 package org.zerock.club.config;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.zerock.club.security.handler.ClubLoginSuccessHandler;
+import org.zerock.club.security.service.ClubUserDetailsService;
 
 @Configuration
 @Log4j2
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true) // https://ncucu.me/136
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     // 1단계
@@ -21,6 +26,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 3단계
     // 정보가 전달된다면 AuthenticationManager가 적절한 AuthenticationProvider를 찾아서 인증을 시도합니다.
 
+    @Autowired
+    private ClubUserDetailsService userDetailsService;
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,21 +36,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
+        /*http.authorizeRequests()
                 .antMatchers("/sample/all").permitAll() // 모든 사용자 허용
                 .antMatchers("/sample/member").hasRole("USER") // USER 권한을 가진 사용자만 허용
-                .antMatchers("/sample/admin").hasRole("ADMIN");
+                .antMatchers("/sample/admin").hasRole("ADMIN");*/
 
         http.formLogin(); // 인가/인증에 문제시 로그인 화면
         http.csrf().disable(); // csrf 토큰 비활성화
-
-        http.oauth2Login();
+        http.logout();
+        http.oauth2Login().successHandler(successHandler());
+        http.rememberMe().tokenValiditySeconds(60 * 60 * 7).userDetailsService(userDetailsService); // 7 days
 
         // csrf 토큰을 활성화 했을때는 post 방식으로 로그아웃, 비활성화시에는 get 방식으로 로그아웃 처리 가능
         // http.logout();
 
         // 별도의 로그인 페이지를 이용
         // http.fromPage();
+    }
+
+    @Bean
+    public ClubLoginSuccessHandler successHandler() {
+        return new ClubLoginSuccessHandler(passwordEncoder());
     }
 
     // 더이상 사용하지 않음
